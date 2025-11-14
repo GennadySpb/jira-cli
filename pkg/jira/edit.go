@@ -379,7 +379,8 @@ func constructCustomFieldsForEdit(fields map[string]string, configuredFields []I
 				data.Update.M.customFields[configured.Key] = []customFieldTypeProjectSet{{Set: customFieldTypeProject{Value: val}}}
 			case customFieldFormatArray:
 				pieces := strings.Split(strings.TrimSpace(val), ",")
-				if configured.Schema.Items == customFieldFormatOption {
+				switch {
+				case configured.Schema.Items == customFieldFormatOption:
 					items := make([]customFieldTypeOptionAddRemove, 0)
 					for _, p := range pieces {
 						if strings.HasPrefix(p, separatorMinus) {
@@ -389,7 +390,17 @@ func constructCustomFieldsForEdit(fields map[string]string, configuredFields []I
 						}
 					}
 					data.Update.M.customFields[configured.Key] = items
-				} else {
+				case configured.Schema.Items == customFieldFormatUser:
+					items := make([]customFieldTypeNameAddRemove, 0)
+					for _, p := range pieces {
+						if strings.HasPrefix(p, separatorMinus) {
+							items = append(items, customFieldTypeNameAddRemove{Remove: &customFieldTypeName{Name: strings.TrimPrefix(p, separatorMinus)}})
+						} else {
+							items = append(items, customFieldTypeNameAddRemove{Add: &customFieldTypeName{Name: p}})
+						}
+					}
+					data.Update.M.customFields[configured.Key] = items
+				default:
 					data.Update.M.customFields[configured.Key] = pieces
 				}
 			case customFieldFormatNumber:

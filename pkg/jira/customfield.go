@@ -5,6 +5,7 @@ const (
 	customFieldFormatArray   = "array"
 	customFieldFormatNumber  = "number"
 	customFieldFormatProject = "project"
+	customFieldFormatUser    = "name"
 )
 
 type customField map[string]interface{}
@@ -23,6 +24,10 @@ type customFieldTypeOption struct {
 	Value string `json:"value"`
 }
 
+type customFieldTypeName struct {
+	Name string `json:"name"`
+}
+
 type customFieldTypeOptionSet struct {
 	Set customFieldTypeOption `json:"set"`
 }
@@ -30,6 +35,11 @@ type customFieldTypeOptionSet struct {
 type customFieldTypeOptionAddRemove struct {
 	Add    *customFieldTypeOption `json:"add,omitempty"`
 	Remove *customFieldTypeOption `json:"remove,omitempty"`
+}
+
+type customFieldTypeNameAddRemove struct {
+	Add    *customFieldTypeName `json:"add,omitempty"`
+	Remove *customFieldTypeName `json:"remove,omitempty"`
 }
 
 type customFieldTypeProject struct {
